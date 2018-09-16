@@ -12,6 +12,8 @@ Subroutine cleanUpScript:
     tokenize script
     remove duplicate words
     remove words with " ' '" (no contractions)
+    separate valid words from invalid words
+
 
 function isValidWord(word):
     blankCount = 0
@@ -32,13 +34,25 @@ function isValidWord(word):
 
 function calcScore(word):
     score = 0
+    letterCountDict = {}
+
     for letter in word:
         score = score + scrabScore[letter]
+        if letter doesn't exist in letterCountDict:
+            letterCountDict[letter] = 1
+        else:
+            letterCountDict[letter] = letterCountDict[letter] + 1
+
+    for letter in letterCountDict:
+        if letterCountDict[letter] > scrabTiles[letter]:
+            score = score - ((letterCountDict[letter] - scrabTiles[letter]) * scrabScore[letter])
     return score
 
-
+create table := (word, calcScore(word), isValidWord(word))
 
 """
+
+import pandas as pd
 
 scrabScore = {"E" : 1, "A" : 1, "O" : 1, "T" : 1, "I" : 1,\
               "N" : 1, "R" : 1, "S" : 1, "L" : 1, "U" : 1,\
@@ -59,4 +73,36 @@ scrabTiles = {"E" : 24, "A" : 16, "O" : 15, "T" : 15, "I" : 13,\
               "Q" : 2, "Z" : 2,\
               " " : 4}
 
-scrabScore["Q"]
+
+def isValidWord(word):
+    blankCount = 0
+    letterCountDict = {}
+
+    for letter in word:
+        if letter not in letterCountDict:
+            letterCountDict[letter] = 1
+        else:
+            letterCountDict[letter] = letterCountDict[letter] + 1
+
+    for letter in letterCountDict:
+        if letterCountDict[letter] > scrabTiles[letter]:
+            blankCount = blankCount + letterCountDict[letter] - scrabTiles[letter]
+            if blankCount > 4:
+                return False
+    return True
+
+def calcScore(word):
+    score = 0
+    letterCountDict = {}
+
+    for letter in word:
+        score = score + scrabScore[letter]
+        if letter not in letterCountDict:
+            letterCountDict[letter] = 1
+        else:
+            letterCountDict[letter] = letterCountDict[letter] + 1
+
+    for letter in letterCountDict:
+        if letterCountDict[letter] > scrabTiles[letter]:
+            score = score - ((letterCountDict[letter] - scrabTiles[letter]) * scrabScore[letter])
+    return score
