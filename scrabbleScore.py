@@ -1,10 +1,43 @@
 
+
+# create a dictionary to map letters to points
+# create a dictionary to map letters to number of tiles
+
+# Import Script of your choice (Bee Movie Script as example - for the memes) into variable named 'script'
+
+# function isValidWord(word):
+#     blankCount = 0
+#     letterCountDict = {}
+#
+#     for letter in word:
+#         if letter doesn't exist in letterCountDict:
+#             letterCountDict[letter] = 1
+#         else:
+#             letterCountDict[letter] = letterCountDict[letter] + 1
+#
+#     for letter in letterCountDict:
+#         if letterCountDict[letter] > scrabTiles[letter]
+#             blankCount = blankCount + letterCount - scrabTiles[letter]
+#             if blankCount > 4
+#                 return False
+#     return True
+#
+# function calcScore(word):
+#     score = 0
+#     letterCountDict = {}
+#
+#     for letter in word:
+#         score = score + scrabScore[letter]
+#         if letter doesn't exist in letterCountDict:
+#             letterCountDict[letter] = 1
+#         else:
+#             letterCountDict[letter] = letterCountDict[letter] + 1
+#
+#     for letter in letterCountDict:
+#         if letterCountDict[letter] > scrabTiles[letter]:
+#             score = score - ((letterCountDict[letter] - scrabTiles[letter]) * scrabScore[letter])
+    # return score
 """
-create a dictionary to map letters to points
-create a dictionary to map letters to number of tiles
-
-Import Script of your choice (Bee Movie Script as example - for the memes) into variable named 'script'
-
 Subroutine cleanUpScript:
     remove punctuation
     replace "-" with space (no compound words)
@@ -15,43 +48,10 @@ Subroutine cleanUpScript:
     separate valid words from invalid words
 
 
-function isValidWord(word):
-    blankCount = 0
-    letterCountDict = {}
-
-    for letter in word:
-        if letter doesn't exist in letterCountDict:
-            letterCountDict[letter] = 1
-        else:
-            letterCountDict[letter] = letterCountDict[letter] + 1
-
-    for letter in letterCountDict:
-        if letterCountDict[letter] > scrabTiles[letter]
-            blankCount = blankCount + letterCount - scrabTiles[letter]
-            if blankCount > 4
-                return False
-    return True
-
-function calcScore(word):
-    score = 0
-    letterCountDict = {}
-
-    for letter in word:
-        score = score + scrabScore[letter]
-        if letter doesn't exist in letterCountDict:
-            letterCountDict[letter] = 1
-        else:
-            letterCountDict[letter] = letterCountDict[letter] + 1
-
-    for letter in letterCountDict:
-        if letterCountDict[letter] > scrabTiles[letter]:
-            score = score - ((letterCountDict[letter] - scrabTiles[letter]) * scrabScore[letter])
-    return score
-
 create table := (word, calcScore(word), isValidWord(word))
 
 """
-
+import csv
 import pandas as pd
 
 scrabScore = {"E" : 1, "A" : 1, "O" : 1, "T" : 1, "I" : 1,\
@@ -106,3 +106,6 @@ def calcScore(word):
         if letterCountDict[letter] > scrabTiles[letter]:
             score = score - ((letterCountDict[letter] - scrabTiles[letter]) * scrabScore[letter])
     return score
+
+with open('beeMovieScript.txt', 'r') as f:
+    script= f.read()
