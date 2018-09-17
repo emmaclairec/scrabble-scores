@@ -43,7 +43,7 @@ Subroutine cleanUpScript:
     replace "-" with space (no compound words)
     change all letters to upper-case
     tokenize script
-    remove duplicate words
+    removduplicate words
     remove words with " ' '" (no contractions)
     separate valid words from invalid words
 
@@ -53,6 +53,8 @@ create table := (word, calcScore(word), isValidWord(word))
 """
 import csv
 import pandas as pd
+import string
+#import re
 
 scrabScore = {"E" : 1, "A" : 1, "O" : 1, "T" : 1, "I" : 1,\
               "N" : 1, "R" : 1, "S" : 1, "L" : 1, "U" : 1,\
@@ -108,4 +110,25 @@ def calcScore(word):
     return score
 
 with open('beeMovieScript.txt', 'r') as f:
-    script= f.read()
+    script = f.read()
+    script = script.upper()
+    table = script.maketrans(".,-!?", "     ")
+    newscript = script.translate(table)
+    newscript = newscript.split(" ")
+    newscript = list(filter(None, newscript))
+    def removeDuplicates(list):
+        words = []
+        seen = set()
+        for word in list:
+            # If value has not been encountered yet,
+            # ... add it to both list and set.
+            if word not in seen:
+                words.append(word)
+                seen.add(word)
+        return words
+removeDuplicates(newscript)
+
+
+
+
+help(string)
