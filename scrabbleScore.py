@@ -40,12 +40,9 @@
 """
 Subroutine cleanUpScript:
     remove punctuation
-    replace "-" with space (no compound words)
     change all letters to upper-case
     tokenize script
-    removduplicate words
-    remove words with " ' '" (no contractions)
-    separate valid words from invalid words
+    remove duplicate words
 
 
 create table := (word, calcScore(word), isValidWord(word))
@@ -109,26 +106,28 @@ def calcScore(word):
             score = score - ((letterCountDict[letter] - scrabTiles[letter]) * scrabScore[letter])
     return score
 
-with open('beeMovieScript.txt', 'r') as f:
-    script = f.read()
-    script = script.upper()
-    table = script.maketrans(".,-!?", "     ")
-    newscript = script.translate(table)
-    newscript = newscript.split(" ")
-    newscript = list(filter(None, newscript))
-    def removeDuplicates(list):
-        words = []
-        seen = set()
-        for word in list:
-            # If value has not been encountered yet,
-            # ... add it to both list and set.
-            if word not in seen:
-                words.append(word)
-                seen.add(word)
-        return words
-removeDuplicates(newscript)
+    with open('beeMovieScript.txt', 'r') as f:
+        script = f.read()
+        script = script.upper()
+        table = script.maketrans(".,-!?", "     ")
+        newscript = script.translate(table)
+        newscript = newscript.split(" ")
+        newscript = list(filter(None, newscript))
+        def removeDuplicates(list):
+            finalscript = []
+            seen = set()
+            for word in list:
+                # If value has not been encountered yet,
+                # ... add it to both list and set.
+                if word not in seen:
+                    finalscript.append(word)
+                    seen.add(word)
+            return finalscript
 
 
+    finalscript = removeDuplicates(newscript)
 
+    print(finalscript)
 
-help(string)
+#     my_cool_df = pd.DataFrame()
+# my_cool_df = pd.concat([df1 df2 df3],axis = 1) to combine horizontally
