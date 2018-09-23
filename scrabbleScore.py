@@ -1,57 +1,4 @@
-
-
-# create a dictionary to map letters to points
-# create a dictionary to map letters to number of tiles
-
-# Import Script of your choice (Bee Movie Script as example - for the memes) into variable named 'script'
-
-# function isValidWord(word):
-#     blankCount = 0
-#     letterCountDict = {}
-#
-#     for letter in word:
-#         if letter doesn't exist in letterCountDict:
-#             letterCountDict[letter] = 1
-#         else:
-#             letterCountDict[letter] = letterCountDict[letter] + 1
-#
-#     for letter in letterCountDict:
-#         if letterCountDict[letter] > scrabTiles[letter]
-#             blankCount = blankCount + letterCount - scrabTiles[letter]
-#             if blankCount > 4
-#                 return False
-#     return True
-#
-# function calcScore(word):
-#     score = 0
-#     letterCountDict = {}
-#
-#     for letter in word:
-#         score = score + scrabScore[letter]
-#         if letter doesn't exist in letterCountDict:
-#             letterCountDict[letter] = 1
-#         else:
-#             letterCountDict[letter] = letterCountDict[letter] + 1
-#
-#     for letter in letterCountDict:
-#         if letterCountDict[letter] > scrabTiles[letter]:
-#             score = score - ((letterCountDict[letter] - scrabTiles[letter]) * scrabScore[letter])
-    # return score
-"""
-Subroutine cleanUpScript:
-    remove punctuation
-    change all letters to upper-case
-    tokenize script
-    remove duplicate words
-
-
-create table := (word, calcScore(word), isValidWord(word))
-
-"""
-import csv
 import pandas as pd
-import string
-#import re
 
 scrabScore = {"E" : 1, "A" : 1, "O" : 1, "T" : 1, "I" : 1,\
               "N" : 1, "R" : 1, "S" : 1, "L" : 1, "U" : 1,\
@@ -76,7 +23,6 @@ scrabTiles = {"E" : 24, "A" : 16, "O" : 15, "T" : 15, "I" : 13,\
 def isValidWord(word):
     blankCount = 0
     letterCountDict = {}
-
     for letter in word:
         if letter not in letterCountDict:
             letterCountDict[letter] = 1
@@ -89,6 +35,7 @@ def isValidWord(word):
             if blankCount > 4:
                 return False
     return True
+
 
 def calcScore(word):
     score = 0
@@ -106,28 +53,32 @@ def calcScore(word):
             score = score - ((letterCountDict[letter] - scrabTiles[letter]) * scrabScore[letter])
     return score
 
-    with open('beeMovieScript.txt', 'r') as f:
-        script = f.read()
-        script = script.upper()
-        table = script.maketrans(".,-!?", "     ")
-        newscript = script.translate(table)
-        newscript = newscript.split(" ")
-        newscript = list(filter(None, newscript))
-        def removeDuplicates(list):
-            finalscript = []
-            seen = set()
-            for word in list:
-                # If value has not been encountered yet,
-                # ... add it to both list and set.
-                if word not in seen:
-                    finalscript.append(word)
-                    seen.add(word)
-            return finalscript
+def removeDuplicates(list):
+    finalscript = []
+    seen = set()
+    for word in list:
+        # If value has not been encountered yet,
+        # ... add it to both list and set.
+        if word not in seen:
+            finalscript.append(word)
+            seen.add(word)
+    return finalscript
+
+with open('beeMovieScript.txt', 'r') as f:
+    script = f.read()
+    script = script.upper()
+    transtring = ".,-!?:0123456789"+'"'+'\n'
+    table = script.maketrans(transtring,len(transtring)*" ")
+    newscript = script.translate(table)
+    newscript = newscript.replace("'","")
+    newscript = newscript.split(" ")
+    newscript = list(filter(None, newscript))
 
 
-    finalscript = removeDuplicates(newscript)
+finalScript = removeDuplicates(newscript)
 
-    print(finalscript)
 
-#     my_cool_df = pd.DataFrame()
-# my_cool_df = pd.concat([df1 df2 df3],axis = 1) to combine horizontally
+resultsTable = pd.DataFrame(data = {'Word': [word for word in finalScript],\
+                                      'Score': [calcScore(word) for word in finalScript],\
+                                      'Valid': [isValidWord(word) for word in finalScript]})
+resultsTable.sort_values(['Score'],ascending=False)
